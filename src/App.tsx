@@ -130,6 +130,13 @@ function App() {
 
   const nearestFib: number = nearestFibonacci(avg);
 
+  function handleClickCopyAverageButton() {
+    navigator.clipboard.writeText(avg.toFixed());
+  }
+  function handleClickCopyNearestFibButton() {
+    navigator.clipboard.writeText(nearestFib.toFixed());
+  }
+
   return (
     <div>
       <div>
@@ -178,10 +185,14 @@ function App() {
       <div>
         Average:&nbsp;
         {avg}
+        <button onClick={handleClickCopyAverageButton}>Copy Average</button>
       </div>
       <div>
         Nearest Fibonacci Number:&nbsp;
         {nearestFib}
+        <button onClick={handleClickCopyNearestFibButton}>
+          Copy Nearest Fibonacci Number
+        </button>
       </div>
     </div>
   );
