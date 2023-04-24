@@ -119,7 +119,7 @@ function App() {
   return (
     <div>
       <div>
-        <label htmlFor="room_title">Room Title</label>
+        <label htmlFor="room_title">Room Title:&nbsp;</label>
         <input
           type="text"
           name="room_title"
@@ -128,7 +128,7 @@ function App() {
         />
       </div>
       <div>
-        <label htmlFor="username">Username</label>
+        <label htmlFor="username">Username:&nbsp;</label>
         <input
           type="text"
           name="username"
@@ -137,7 +137,7 @@ function App() {
         />
       </div>
       <div>
-        <label htmlFor="estimation">Your estimation:&nbsp;</label>
+        <label htmlFor="estimation">Your Estimation:&nbsp;</label>
         <select
           name="estimation"
           id="estimation"
@@ -152,7 +152,7 @@ function App() {
           ))}
         </select>
       </div>
-      <div>number of users:&nbsp;{users?.length ?? 0}</div>
+      <div>Number of Users:&nbsp;{users?.length ?? 0}</div>
       <ul>
         {users?.map((user) => (
           <li key={user.id}>
@@ -162,7 +162,7 @@ function App() {
         ))}
       </ul>
       <div>
-        average:&nbsp;
+        Average:&nbsp;
         {users &&
           users.reduce((sum, user) => sum + (user.estimation ?? 0), 0) /
             users.length}
