@@ -112,21 +112,21 @@ function App() {
 
   const nearestFib: number = nearestFibonacci(avg);
 
-  function handleChangeRoomTitle(e: React.ChangeEvent<HTMLInputElement>) {
+  const handleChangeRoomTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRoomTitle(e.currentTarget.value);
-  }
-  function handleChangeUsername(e: React.ChangeEvent<HTMLInputElement>) {
+  };
+  const handleChangeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(e.currentTarget.value);
-  }
-  function handleChangeEstimation(e: React.ChangeEvent<HTMLSelectElement>) {
+  };
+  const handleChangeEstimation = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setEstimation(parseInt(e.currentTarget.value));
-  }
-  function handleClickCopyAverageButton() {
+  };
+  const handleClickCopyAverageButton = () => {
     navigator.clipboard.writeText(avg.toFixed());
-  }
-  function handleClickCopyNearestFibButton() {
+  };
+  const handleClickCopyNearestFibButton = () => {
     navigator.clipboard.writeText(nearestFib.toFixed());
-  }
+  };
 
   return (
     <div>
