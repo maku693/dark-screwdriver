@@ -1,5 +1,5 @@
 import { RealtimeChannel, createClient } from "@supabase/supabase-js";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import "./App.css";
 
 const supabase = createClient(
@@ -28,21 +28,13 @@ function App() {
   );
 
   const [estimation, setEstimation] = useState<number | null>(null);
-  useEffect(() => {
-    const keydownHandler = (e: KeyboardEvent) => {
-      if (e.target !== document.body) return;
-      const i = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"].findIndex(
-        (v) => v === e.key
-      );
-      if (i > -1) {
-        setEstimation(i);
-      }
-    };
-    document.addEventListener("keydown", keydownHandler);
-    return () => {
-      document.removeEventListener("keydown", keydownHandler);
-    };
-  }, []);
+  const estimationSelectRef = useRef<HTMLSelectElement>(null);
+  const handleChangeEstimation = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      setEstimation(parseInt(e.currentTarget.value));
+    },
+    []
+  );
 
   const [users, setUsers] = useState<Estimator[] | null>(null);
 
@@ -119,6 +111,8 @@ function App() {
     if (typeof channel === "undefined") return;
     channel.on("broadcast", { event: "clearEstimation" }, () => {
       setEstimation(null);
+      const el = estimationSelectRef.current;
+      if (el) el.selectedIndex = 0;
     });
   }, [channel]);
 
@@ -142,7 +136,22 @@ function App() {
           onChange={handleChangeUsername}
         />
       </div>
-      <div>estimation:&nbsp;{estimation}</div>
+      <div>
+        <label htmlFor="estimation">Your estimation:&nbsp;</label>
+        <select
+          name="estimation"
+          id="estimation"
+          onChange={handleChangeEstimation}
+          ref={estimationSelectRef}
+        >
+          <option value={0}></option>
+          {[1, 2, 3, 5, 8, 13, 21, 34].map((n) => (
+            <option key={n} value={n}>
+              {n}
+            </option>
+          ))}
+        </select>
+      </div>
       <div>number of users:&nbsp;{users?.length ?? 0}</div>
       <ul>
         {users?.map((user) => (
