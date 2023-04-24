@@ -1,5 +1,5 @@
 import { RealtimeChannel, createClient } from "@supabase/supabase-js";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import { average } from "./array";
 import { nearestFibonacci } from "./fibonacci";
@@ -14,32 +14,13 @@ type PresenceState = { username: string; estimation: number };
 
 function App() {
   const [roomTitle, setRoomTitle] = useState<string>("");
-  const handleChangeRoomTitle = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setRoomTitle(e.currentTarget.value);
-    },
-    []
-  );
-
   const [username, setUsername] = useState<string>("");
-  const handleChangeUsername = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setUsername(e.currentTarget.value);
-    },
-    []
-  );
-
   const [estimation, setEstimation] = useState<number>(0);
-  const handleChangeEstimation = useCallback(
-    (e: React.ChangeEvent<HTMLSelectElement>) => {
-      setEstimation(parseInt(e.currentTarget.value));
-    },
-    []
-  );
 
   const [users, setUsers] = useState<Estimator[] | null>(null);
 
   const [channel, setChannel] = useState<RealtimeChannel>();
+
   useEffect(() => {
     if (roomTitle.length < 1) {
       return;
@@ -131,6 +112,15 @@ function App() {
 
   const nearestFib: number = nearestFibonacci(avg);
 
+  function handleChangeRoomTitle(e: React.ChangeEvent<HTMLInputElement>) {
+    setRoomTitle(e.currentTarget.value);
+  }
+  function handleChangeUsername(e: React.ChangeEvent<HTMLInputElement>) {
+    setUsername(e.currentTarget.value);
+  }
+  function handleChangeEstimation(e: React.ChangeEvent<HTMLSelectElement>) {
+    setEstimation(parseInt(e.currentTarget.value));
+  }
   function handleClickCopyAverageButton() {
     navigator.clipboard.writeText(avg.toFixed());
   }
