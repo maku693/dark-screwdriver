@@ -9,8 +9,8 @@ const supabase = createClient(
   import.meta.env.VITE_SUPABASE_KEY
 );
 
-type Estimator = { id: string; username: string; estimation: number | null };
-type PresenceState = { username: string; estimation: number | null };
+type Estimator = { id: string; username: string; estimation: number };
+type PresenceState = { username: string; estimation: number };
 
 function App() {
   const [roomTitle, setRoomTitle] = useState<string>("");
@@ -29,7 +29,7 @@ function App() {
     []
   );
 
-  const [estimation, setEstimation] = useState<number | null>(null);
+  const [estimation, setEstimation] = useState<number>(0);
   const estimationSelectRef = useRef<HTMLSelectElement>(null);
   const handleChangeEstimation = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -112,7 +112,6 @@ function App() {
   useEffect(() => {
     if (typeof channel === "undefined") return;
     channel.on("broadcast", { event: "clearEstimation" }, () => {
-      setEstimation(null);
       const el = estimationSelectRef.current;
       if (el) el.selectedIndex = 0;
     });
