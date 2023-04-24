@@ -1,6 +1,8 @@
 import { RealtimeChannel, createClient } from "@supabase/supabase-js";
 import { useCallback, useEffect, useRef, useState } from "react";
 import "./App.css";
+import { average } from "./array";
+import { nearestFibonacci } from "./fibonacci";
 
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
@@ -116,6 +118,18 @@ function App() {
     });
   }, [channel]);
 
+  const avg: number = (() => {
+    if (!users) return 0;
+
+    const estimations = users
+      .map(({ estimation }) => estimation)
+      .filter((x): x is number => x !== null);
+
+    return average(estimations);
+  })();
+
+  const nearestFib: number = nearestFibonacci(avg);
+
   return (
     <div>
       <div>
@@ -163,9 +177,11 @@ function App() {
       </ul>
       <div>
         Average:&nbsp;
-        {users &&
-          users.reduce((sum, user) => sum + (user.estimation ?? 0), 0) /
-            users.length}
+        {avg}
+      </div>
+      <div>
+        Nearest Fibonacci Number:&nbsp;
+        {nearestFib}
       </div>
     </div>
   );
