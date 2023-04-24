@@ -30,7 +30,6 @@ function App() {
   );
 
   const [estimation, setEstimation] = useState<number>(0);
-  const estimationSelectRef = useRef<HTMLSelectElement>(null);
   const handleChangeEstimation = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
       setEstimation(parseInt(e.currentTarget.value));
@@ -109,6 +108,9 @@ function App() {
       document.removeEventListener("keyup", keyupHandler);
     };
   }, [channel]);
+
+  const estimationSelectRef = useRef<HTMLSelectElement>(null);
+
   useEffect(() => {
     if (typeof channel === "undefined") return;
     channel.on("broadcast", { event: "clearEstimation" }, () => {
