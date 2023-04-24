@@ -125,20 +125,20 @@ function App() {
   return (
     <div>
       <div>
+        <label htmlFor="room_title">Room Title</label>
         <input
           type="text"
           name="room_title"
           id="room_title"
-          placeholder="Room Title"
           onChange={handleChangeRoomTitle}
         />
       </div>
       <div>
+        <label htmlFor="username">Username</label>
         <input
           type="text"
           name="username"
           id="username"
-          placeholder="Username"
           onChange={handleChangeUsername}
         />
       </div>
