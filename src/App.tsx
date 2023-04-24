@@ -168,8 +168,8 @@ function App() {
       <ul>
         {users?.map((user) => (
           <li key={user.id}>
-            <div>username:&nbsp;{user.username}</div>
-            <div>estimation:&nbsp;{user.estimation}</div>
+            <div>Username:&nbsp;{user.username}</div>
+            <div>Estimation:&nbsp;{user.estimation}</div>
           </li>
         ))}
       </ul>
