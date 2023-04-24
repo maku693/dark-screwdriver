@@ -29,7 +29,7 @@ function App() {
 
   const [estimation, setEstimation] = useState<number | null>(null);
   useEffect(() => {
-    document.addEventListener("keydown", (e) => {
+    const keydownHandler = (e: KeyboardEvent) => {
       if (e.target !== document.body) return;
       const i = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"].findIndex(
         (v) => v === e.key
@@ -37,10 +37,14 @@ function App() {
       if (i > -1) {
         setEstimation(i);
       }
-    });
+    };
+    document.addEventListener("keydown", keydownHandler);
+    return () => {
+      document.removeEventListener("keydown", keydownHandler);
+    };
   }, []);
 
-  const [users, setUsers] = useState<Estimator[]>();
+  const [users, setUsers] = useState<Estimator[] | null>(null);
 
   const [channel, setChannel] = useState<RealtimeChannel>();
   useEffect(() => {
@@ -94,15 +98,22 @@ function App() {
       }
       setUsers(users);
     });
+    return () => {
+      setUsers(null);
+    };
   }, [channel]);
 
   useEffect(() => {
     if (typeof channel === "undefined") return;
-    document.addEventListener("keyup", (e) => {
+    const keyupHandler = (e: KeyboardEvent) => {
       if (e.target !== document.body) return;
       if (e.key !== " ") return;
       channel.send({ type: "broadcast", event: "clearEstimation" });
-    });
+    };
+    document.addEventListener("keyup", keyupHandler);
+    return () => {
+      document.removeEventListener("keyup", keyupHandler);
+    };
   }, [channel]);
   useEffect(() => {
     if (typeof channel === "undefined") return;
