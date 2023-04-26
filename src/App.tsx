@@ -19,7 +19,7 @@ function App() {
 
   const [users, setUsers] = useState<Estimator[] | null>(null);
 
-  const [channel, setChannel] = useState<RealtimeChannel>();
+  const [channel, setChannel] = useState<RealtimeChannel | null>(null);
 
   const estimationSelectRef = useRef<HTMLSelectElement>(null);
 
@@ -48,7 +48,7 @@ function App() {
       if (status === "SUBSCRIBED") {
         setChannel(channel);
       } else {
-        setChannel(undefined);
+        setChannel(null);
       }
     });
     return () => {
@@ -57,7 +57,7 @@ function App() {
   }, [roomTitle, username]);
 
   useEffect(() => {
-    if (typeof channel === "undefined") return;
+    if (channel === null) return;
     const payload: PresenceState = { username, estimation };
     channel.track(payload);
     () => {
@@ -66,7 +66,7 @@ function App() {
   }, [channel, estimation, username]);
 
   useEffect(() => {
-    if (typeof channel === "undefined") return;
+    if (channel === null) return;
     channel.on("presence", { event: "sync" }, () => {
       const state = channel.presenceState<PresenceState>();
       const presenceKeys = Object.keys(state);
@@ -87,7 +87,7 @@ function App() {
   }, [channel]);
 
   useEffect(() => {
-    if (typeof channel === "undefined") return;
+    if (channel === null) return;
     const keyupHandler = (e: KeyboardEvent) => {
       if (e.target !== document.body) return;
       if (e.key !== " ") return;
@@ -100,7 +100,7 @@ function App() {
   }, [channel]);
 
   useEffect(() => {
-    if (typeof channel === "undefined") return;
+    if (channel === null) return;
     channel.on("broadcast", { event: "clearEstimation" }, () => {
       const el = estimationSelectRef.current;
       if (el) el.selectedIndex = 0;
