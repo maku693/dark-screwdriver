@@ -1,5 +1,5 @@
 import { RealtimeChannel, createClient } from "@supabase/supabase-js";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import "./App.css";
 import { average } from "./array";
 import { nearestFibonacci } from "./fibonacci";
@@ -20,6 +20,15 @@ function App() {
   const [users, setUsers] = useState<Estimator[] | null>(null);
 
   const [channel, setChannel] = useState<RealtimeChannel>();
+
+  const estimationSelectRef = useRef<HTMLSelectElement>(null);
+
+  const avg: number = useMemo(
+    () => (users ? average(users.map(({ estimation }) => estimation)) : 0),
+    [users]
+  );
+
+  const nearestFib: number = useMemo(() => nearestFibonacci(avg), [avg]);
 
   useEffect(() => {
     if (roomTitle.length < 1) {
@@ -90,8 +99,6 @@ function App() {
     };
   }, [channel]);
 
-  const estimationSelectRef = useRef<HTMLSelectElement>(null);
-
   useEffect(() => {
     if (typeof channel === "undefined") return;
     channel.on("broadcast", { event: "clearEstimation" }, () => {
@@ -100,33 +107,30 @@ function App() {
     });
   }, [channel]);
 
-  const avg: number = (() => {
-    if (!users) return 0;
-
-    const estimations = users
-      .map(({ estimation }) => estimation)
-      .filter((x): x is number => x !== null);
-
-    return average(estimations);
-  })();
-
-  const nearestFib: number = nearestFibonacci(avg);
-
-  const handleChangeRoomTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setRoomTitle(e.currentTarget.value);
-  };
-  const handleChangeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUsername(e.currentTarget.value);
-  };
-  const handleChangeEstimation = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setEstimation(parseInt(e.currentTarget.value));
-  };
-  const handleClickCopyAverageButton = () => {
+  const handleChangeRoomTitle = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setRoomTitle(e.currentTarget.value);
+    },
+    []
+  );
+  const handleChangeUsername = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setUsername(e.currentTarget.value);
+    },
+    []
+  );
+  const handleChangeEstimation = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      setEstimation(parseInt(e.currentTarget.value));
+    },
+    []
+  );
+  const handleClickCopyAverageButton = useCallback(() => {
     navigator.clipboard.writeText(avg.toFixed());
-  };
-  const handleClickCopyNearestFibButton = () => {
+  }, [avg]);
+  const handleClickCopyNearestFibButton = useCallback(() => {
     navigator.clipboard.writeText(nearestFib.toFixed());
-  };
+  }, [nearestFib]);
 
   return (
     <div>
