@@ -52,7 +52,7 @@ function App() {
       }
     });
     return () => {
-      channel.unsubscribe();
+      supabase.removeChannel(channel);
     };
   }, [roomTitle, username]);
 
