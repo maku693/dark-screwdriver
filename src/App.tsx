@@ -184,6 +184,7 @@ function App() {
           ))}
         </select>
       </div>
+      <div>Connection status: {channel ? "connected" : "disconnected"}</div>
       <div>Number of Users:&nbsp;{users?.length ?? 0}</div>
       <ul>
         {users?.map((user) => (
