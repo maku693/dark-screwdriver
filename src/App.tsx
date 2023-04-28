@@ -31,6 +31,14 @@ function App() {
   const nearestFib: number = useMemo(() => nearestFibonacci(avg), [avg]);
 
   useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const roomTitle = searchParams.get("room_title");
+    if (roomTitle) {
+      setRoomTitle(roomTitle);
+    }
+  }, []);
+
+  useEffect(() => {
     if (roomTitle.length < 1) {
       return;
     }
@@ -157,6 +165,7 @@ function App() {
           name="room_title"
           id="room_title"
           onChange={handleChangeRoomTitle}
+          defaultValue={roomTitle}
         />
       </div>
       <div>
