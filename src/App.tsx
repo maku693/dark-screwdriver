@@ -98,18 +98,22 @@ function App() {
     };
   }, [channel]);
 
-  useEffect(() => {
-    if (channel === null) return;
-    const keyupHandler = (e: KeyboardEvent) => {
+  const keyupHandler = useCallback(
+    (e: KeyboardEvent) => {
+      if (channel === null) return;
       if (e.target !== document.body) return;
       if (e.key !== " ") return;
       channel.send({ type: "broadcast", event: "clearEstimation" });
-    };
+    },
+    [channel]
+  );
+
+  useEffect(() => {
     document.addEventListener("keyup", keyupHandler);
     return () => {
       document.removeEventListener("keyup", keyupHandler);
     };
-  }, [channel]);
+  }, [keyupHandler]);
 
   useEffect(() => {
     if (channel === null) return;
