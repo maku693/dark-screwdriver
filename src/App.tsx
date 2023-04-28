@@ -56,6 +56,18 @@ function App() {
     };
   }, [roomTitle, username]);
 
+  const beforeUnloadHandler = useCallback(() => {
+    if (channel === null) return;
+    supabase.removeChannel(channel);
+  }, [channel]);
+
+  useEffect(() => {
+    window.addEventListener("beforeunload", beforeUnloadHandler);
+    return () => {
+      window.removeEventListener("beforeunload", beforeUnloadHandler);
+    };
+  }, [beforeUnloadHandler]);
+
   useEffect(() => {
     if (channel === null) return;
     const payload: PresenceState = { username, estimation };
